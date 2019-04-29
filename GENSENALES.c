@@ -55,10 +55,10 @@ void SENALES_PIT_config_trg() {
 	PIT_clock_gating();
 	PIT_enable();
 	NVIC_set_basepri_threshold(PRIORITY_12);
-	NVIC_enable_interrupt_and_priotity(PIT_CH1_IRQ, PRIORITY_3);
+	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_3);
 	NVIC_global_enable_interrupts;
-	PIT_delay(PIT_1, SYSTEM_CLOCK, DELAYTRG);
-	PIT_enable_interrupt_1(PIT_1);
+	PIT_delay(PIT_0, SYSTEM_CLOCK, DELAYTRG);
+	PIT_enable_interrupt_0(PIT_0);
 }
 
 void SENALES_CUADRADA() {
