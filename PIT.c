@@ -9,6 +9,7 @@
 #include "Bits.h"
 #include "MK64F12.h"
 #include "GPIO.h"
+#include "NVIC.h"
 
 static uint8_t g_pit0_intr_flag = 0;
 static uint8_t g_pit1_intr_flag = 0;
@@ -122,4 +123,12 @@ void PIT_clear2_interrupt_flag(void) {
 }
 void PIT_clear3_interrupt_flag(void) {
 	g_pit3_intr_flag = 0;
+}
+
+void PIT0_DMA_config(float system_clock, float delay) {
+	PIT_clock_gating();
+	PIT_enable();
+//	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_3);
+	NVIC_global_enable_interrupts;
+	PIT_delay(PIT_0, system_clock, delay);
 }

@@ -28,8 +28,7 @@
 /** Constant that represent the clock enable for GPIO E */
 #define GPIO_CLOCK_GATING_PORTE 0x00002000
 
-#define FALSE 0
-#define TRUE 1
+
 
 /** Selects a pullup resistor */
 #define GPIO_PS    0x00000001
@@ -75,52 +74,9 @@
 #define INTR_LOGIC1        0x000C0000
 
 
-typedef struct
-{
-	uint8_t flag_port_a : 1;
-	uint8_t flag_port_b : 1;
-	uint8_t flag_port_c : 1;
-	uint8_t flag_port_d : 1;
-	uint8_t flag_port_e : 1;
-} gpio_interrupt_flags_t;
-
-typedef enum {bit_0,  /*!< Bit 0 */
-			  bit_1,  /*!< Bit 1 */
-			  bit_2,  /*!< Bit 2 */
-			  bit_3,  /*!< Bit 3 */
-			  bit_4,  /*!< Bit 4 */
-			  bit_5,  /*!< Bit 5 */
-			  bit_6,  /*!< Bit 6 */
-			  bit_7,  /*!< Bit 7 */
-	          bit_8,  /*!< Bit 8 */
-	          bit_9,  /*!< Bit 9 */
-			  bit_10, /*!< Bit 10 */
-			  bit_11, /*!< Bit 11 */
-			  bit_12, /*!< Bit 12 */
-			  bit_13, /*!< Bit 13 */
-			  bit_14, /*!< Bit 14 */
-			  bit_15, /*!< Bit 15 */
-			  bit_16, /*!< Bit 16 */
-			  bit_17, /*!< Bit 17 */
-			  bit_18, /*!< Bit 18 */
-			  bit_19, /*!< Bit 19 */
-			  bit_20, /*!< Bit 20 */
-			  bit_21, /*!< Bit 21 */
-			  bit_22, /*!< Bit 22 */
-			  bit_23,/*!< Bit 23 */
-			  bit_24, /*!< Bit 24 */
-			  bit_25, /*!< Bit 25 */
-			  bit_26, /*!< Bit 26 */
-			  bit_27, /*!< Bit 27 */
-			  bit_28, /*!< Bit 28 */
-			  bit_29, /*!< Bit 29 */
-	          bit_30, /*!< Bit 30 */
-			  bit_31  /*!< Bit 31 */
-			} BitsType;
-
 /*! This definition is used to configure whether a pin is an input or an output*/
-typedef enum {GPIO_INPUT,/*!< Definition to configure a pin as input */
-			  GPIO_OUTPUT /*!< Definition to configure a pin as output */
+typedef enum {GPIO_OUTPUT,/*!< Definition to configure a pin as output */
+			  GPIO_INPUT /*!< Definition to configure a pin as input */
 			 }gpio_port_direction_t;
 
 
@@ -136,6 +92,14 @@ typedef enum{GPIO_A, /*!< Definition to select GPIO A */
 
 /*! This data type is used to configure the pin control register*/
 typedef const uint32_t gpio_pin_control_register_t;
+
+uint8_t get_sw3_flag();
+
+void clear_sw3_flag();
+
+uint8_t get_sw2_flag();
+
+void clear_sw2_flag();
 
 /********************************************************************************************/
 /********************************************************************************************/
@@ -263,11 +227,5 @@ void GPIO_clear_pin(gpio_port_name_t port_name, uint8_t pin);
 void GPIO_toogle_pin(gpio_port_name_t port_name, uint8_t pin);
 
 uint32_t shifting(uint8_t pin);
-
-void GPIO_callback_init(gpio_port_name_t port_name,void (*handler)(void));
-
-void GPIO_clear_irq_status(gpio_port_name_t gpio);
-
-uint8_t GPIO_get_irq_status(gpio_port_name_t gpio);
 
 #endif /* GPIO_H_ */

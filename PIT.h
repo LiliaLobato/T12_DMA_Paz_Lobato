@@ -38,4 +38,6 @@ void PIT_clear1_interrupt_flag(void);
 void PIT_clear2_interrupt_flag(void);
 void PIT_clear3_interrupt_flag(void);
 
+void PIT0_DMA_config(float system_clock, float delay);
+
 #endif /* PIT_H_ */

@@ -47,46 +47,52 @@
 
 #include "MK64F12.h"
 #include "GPIO.h"
+#include "Bits.h"
 
 static void (*gpio_C_callback)(void) = 0;
 static void (*gpio_A_callback)(void) = 0;
+static void (*gpio_B_callback)(void) = 0;
+uint8_t sw2_flag_g;
+uint8_t sw3_flag_g;
 
-static gpio_interrupt_flags_t g_intr_status_flag = {0};
+uint8_t get_sw2_flag()
+{
+	return (sw2_flag_g);
+}
+
+void clear_sw2_flag()
+{
+	sw2_flag_g = FALSE;
+}
+
+
+uint8_t get_sw3_flag()
+{
+	return (sw3_flag_g);
+}
+
+void clear_sw3_flag()
+{
+	sw3_flag_g = FALSE;
+}
 
 void GPIO_callback_init(gpio_port_name_t port_name,void (*handler)(void))
 {
-	if(GPIO_A == port_name)
+	switch(port_name)
 	{
+	case GPIO_A:
 		gpio_A_callback = handler;
-	}
-	else
-	{
+		break;
+	case GPIO_B:
+		gpio_B_callback = handler;
+		break;
+	case GPIO_C:
 		gpio_C_callback = handler;
+		break;
+	default:
+		break;
 	}
 }
-
-void PORTC_IRQHandler(void)
-{
-	if(gpio_C_callback)
-	{
-		gpio_C_callback();
-	}
-
-	GPIO_clear_interrupt(GPIO_C);
-
-}
-
-
-void PORTA_IRQHandler(void)
-{
-	if(gpio_A_callback)
-	{
-		gpio_A_callback();
-	}
-
-	GPIO_clear_interrupt(GPIO_A);
-}
-
 
 void GPIO_clear_interrupt(gpio_port_name_t port_name)
 {
@@ -112,6 +118,31 @@ void GPIO_clear_interrupt(gpio_port_name_t port_name)
 				break;
 				}
 }
+
+void PORTC_IRQHandler() /**Entra cuando ocurre una interrupcion en el puerto C*/
+{
+
+	if(gpio_C_callback)
+	{
+		gpio_C_callback();
+	}
+
+
+	GPIO_clear_interrupt(GPIO_C); //reinicia la interrupción
+
+}
+
+void PORTA_IRQHandler(void)
+{
+
+	if(gpio_A_callback)
+	{
+		gpio_A_callback();
+	}
+
+	GPIO_clear_interrupt(GPIO_A);
+}
+
 
 uint8_t GPIO_clock_gating(gpio_port_name_t port_name)
 {
@@ -353,7 +384,7 @@ void GPIO_data_direction_pin(gpio_port_name_t portName, uint8_t state, uint8_t p
 {
 	uint32_t pin32 = shifting(pin); /**Puts pin´s bits on the last 8 bits (24-31)*/
 
-	if(GPIO_INPUT == state)
+	if(GPIO_OUTPUT == state)
 	{
 		switch(portName)
 		{
